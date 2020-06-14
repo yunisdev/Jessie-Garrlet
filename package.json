@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f ./env/data.env node index.js",
+    "start": "node index.js",
     "dev": "env-cmd -f ./env/data.env nodemon index.js"
   },
   "author": "YunisDEV",
