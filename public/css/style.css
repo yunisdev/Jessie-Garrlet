@@ -29,12 +29,11 @@ nav a {
   background-color: #7e407b;
 }
 .message-container {
-  overflow-y: auto;
   width: 90%;
   margin-left: 5%;
   height: 80vh;
   margin-top: 6vh;
-  position:fixed;
+  position: fixed;
   background-color: white;
   padding: 20px;
   border-radius: 20px;
@@ -72,4 +71,46 @@ nav a {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.message-body {
+  overflow-y: auto;
+  height: 90%;
+}
+.message-form *{
+  outline: none!important;
+}
+.message-form {
+  width: 100%;
+  float: left;
+  padding: 0 50px;
+  height: 10%;
+}
+.message-form input {
+  width: 90%;
+  float: left;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgb(179, 179, 179);
+  font-size: 18px;
+  transition: 0.3s all ease-out;
+}
+.message-form button {
+  float: right;
+  padding: 10px;
+  font-size: 18px;
+  width: 50px;
+  background-color: white;
+  color: #7e407b;
+  border-style: solid;
+  border-color: #7e407b;
+  border-radius: 50%;
+  transition: 0.3s all ease-out;
+}
+.message-form button:hover { 
+  background-color: #7e407b;
+  color:white
+}
+.message-form input:focus {
+  border-color: #7e407b;
+  box-shadow: 0px 0px 10px #7e407b;
 }

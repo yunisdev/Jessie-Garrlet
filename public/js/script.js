@@ -4,8 +4,16 @@ var synth = window.speechSynthesis;
 var button = document.querySelector('#talk')
 var you = document.querySelector('#you')
 var jessie = document.querySelector('#jessie')
-var messages = document.querySelector('.message-container')
-
+var messages = document.querySelector('.message-body')
+var form = document.querySelector('form.message-form')
+var messageInput = document.querySelector('form.message-form input')
+var inputStatus
+messageInput.addEventListener('focus', (e) => {
+    inputStatus = 'focus'
+})
+messageInput.addEventListener('blur', (e) => {
+    inputStatus = "blur"
+})
 function chat(side, text) {
     if (messages.classList.contains('no-message')) {
         messages.classList.remove('no-message')
@@ -20,6 +28,9 @@ if (SpeechRecognition) {
 
     const recognition = new SpeechRecognition()
     recognition.continuous = true
+    recognition.onerror = (e) => {
+        console.log(e.error)
+    }
     button.addEventListener('click', (e) => {
         if (button.classList.contains('start')) {
             recognition.start()
@@ -40,10 +51,21 @@ if (SpeechRecognition) {
         var result = e.results[e.results.length - 1][0].transcript
         socket.emit('chat message', result)
         chat('you', result)
+        recognition.stop()
+    })
+    form.addEventListener('submit', (e) => {
+        console.log('Hello')
+        e.preventDefault()
+        socket.emit('chat message', messageInput.value)
+        if (!button.classList.contains('start')) {
+            recognition.stop()
+        }
     })
     document.addEventListener('keydown', (e) => {
-        if (e.code == 'Space') {
+        if (e.code == 'Space' && inputStatus == 'blur') {
             button.click()
+        } else if (e.code == 'Enter') {
+            document.querySelector('form.message-form button').click()
         }
     })
     socket.on('bot reply', (text) => {
@@ -51,7 +73,7 @@ if (SpeechRecognition) {
         var utterThis = new SpeechSynthesisUtterance(text);
         synth.speak(utterThis)
         utterThis.addEventListener('start', () => {
-            recognition.stop()
+
         })
         utterThis.addEventListener('end', () => {
             recognition.start()

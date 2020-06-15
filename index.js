@@ -1,4 +1,4 @@
-var {APIAI_TOKEN} = process.env
+var { APIAI_TOKEN } = process.env
 const apiai = require('apiai')(APIAI_TOKEN)
 const socketio = require('socket.io')
 const express = require('express')
@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
     res.sendFile('index.html')
 })
 
-
 io.on('connection', function (socket) {
     socket.on('chat message', (text) => {
+
         let apiaiReq = apiai.textRequest(text, {
             sessionId: Math.random() * 10000
         })
@@ -26,6 +26,7 @@ io.on('connection', function (socket) {
             console.log(error)
         })
         apiaiReq.end()
+
     })
 })
 
