@@ -5,15 +5,15 @@ var button = document.querySelector('#talk')
 var you = document.querySelector('#you')
 var jessie = document.querySelector('#jessie')
 var messages = document.querySelector('.message-body')
-// var form = document.querySelector('form.message-form')
-// var inputStatus = 'blur'
-// var messageInput = document.querySelector('form.message-form input')
-// messageInput.addEventListener('focus', (e) => {
-//     inputStatus = 'focus'
-// })
-// messageInput.addEventListener('blur', (e) => {
-//     inputStatus = 'blur'
-// })
+var form = document.querySelector('form.message-form')
+var messageInput = document.querySelector('form.message-form input')
+var inputStatus = 'blur'
+messageInput.addEventListener('focus', (e) => {
+    inputStatus = 'focus'
+})
+messageInput.addEventListener('blur', (e) => {
+    inputStatus = 'blur'
+})
 function chat(side, text) {
     if (messages.classList.contains('no-message')) {
         messages.classList.remove('no-message')
@@ -53,28 +53,26 @@ if (SpeechRecognition) {
         chat('you', result)
         recognition.stop()
     })
-    // form.addEventListener('submit', (e) => {
-    //     console.log('Hello')
-    //     e.preventDefault()
-    //     socket.emit('chat message', messageInput.value)
-    //     if (!button.classList.contains('start')) {
-    //         recognition.stop()
-    //     }
-    // })
-    document.addEventListener('keydown', (e) => {
-        if (e.code == 'Space') {
-            button.click()
-        } 
-        // else if (e.code == 'Enter') {
-        //     document.querySelector('form.message-form button').click()
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        socket.emit('chat message', messageInput.value)
+        chat('you', messageInput.value)
+        messageInput.value = ''
+        // if (!button.classList.contains('start')) {
+            recognition.stop()
         // }
+    })
+    document.addEventListener('keydown', (e) => {
+        if (e.code == 'Space' && inputStatus == 'blur') {
+            button.click()
+        }
     })
     socket.on('bot reply', (text) => {
         chat('jessie', text)
         var utterThis = new SpeechSynthesisUtterance(text);
         synth.speak(utterThis)
         utterThis.addEventListener('start', () => {
-            recognition.stop()
+            
         })
         utterThis.addEventListener('end', () => {
             recognition.start()
