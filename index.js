@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', function (socket) {
     const dataResolver = {
-        countryInfo: (parameters) => {
+        countryInfo: ({ parameters }) => {
             axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
                 .then(response => {
                     var typeOfData = parameters['country-info-type']
@@ -34,10 +34,17 @@ io.on('connection', function (socket) {
                     console.log(error);
                 });
         },
-        currencyConvert: (parameters) => {
+        currencyConvert: ({ parameters, resolvedQuery }) => {
             var from = parameters['unit-currency']['currency']
+            var q = resolvedQuery.toLowerCase()
+            if ((q.includes('try') || q.includes('turkish lira')) && !from) {
+                from = 'try'
+            }
+            console.log(from)
             var to = parameters['currency-name']
-            var amount = parameters['unit-currency']['amount'] || 1
+            console.log(to)
+            var amount = parameters['unit-currency']['amount']
+            console.log(amount)
             if (from && to && amount) {
                 var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
                 axios.get(url).then((res) => {
@@ -49,11 +56,12 @@ io.on('connection', function (socket) {
                     socket.emit('bot reply', 'Can not do this operation')
                 })
             } else {
+                console.log('a')
                 socket.emit('bot reply', 'Can not do this operation')
             }
 
         },
-        globalStats: (parameters) => {
+        globalStats: ({ parameters }) => {
             var type = parameters['global-stats-types']
             if (type == 'covid19') {
                 axios.get(`https://www.worldometers.info/coronavirus/`).then((res) => {
@@ -65,7 +73,6 @@ io.on('connection', function (socket) {
                     socket.emit('bot reply', 'Can not do this operation')
                 })
             } else if (type == 'worldPopulation') {
-                console.log('a')
                 axios.get(`https://www.worldometers.info/world-population/`).then((res) => {
                     var html = res.data
                     const $ = cheerio.load(html)
@@ -86,7 +93,7 @@ io.on('connection', function (socket) {
         apiaiReq.on('response', (response) => {
             var aiText = response.result.fulfillment.speech
             if (dataResolver[aiText]) {
-                dataResolver[aiText](response.result.parameters)
+                dataResolver[aiText](response.result)
             } else {
                 socket.emit('bot reply', aiText)
             }
