@@ -7,6 +7,7 @@ const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
 const axios = require('axios')
+const cheerio = require('cheerio')
 app.use(express.static(__dirname + '/views'))
 app.use(express.static(__dirname + '/public'))
 app.get('/', (req, res) => {
@@ -16,16 +17,15 @@ app.get('/', (req, res) => {
 io.on('connection', function (socket) {
     const dataResolver = {
         countryInfo: (parameters) => {
-            console.log(parameters)
-            axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code']['alpha-3'].toLowerCase()}`)
+            axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
                 .then(response => {
                     var typeOfData = parameters['country-info-type']
-                    if (typeOfData == 'currencies') {
-                        var currencies = []
+                    if (typeOfData == 'currencies' || typeOfData == 'languages') {
+                        var dataForReturn = []
                         response.data[typeOfData].forEach(i => {
-                            currencies.push(i.name)
+                            dataForReturn.push(i.name)
                         })
-                        socket.emit('bot reply', currencies)
+                        socket.emit('bot reply', dataForReturn)
                     } else {
                         socket.emit('bot reply', response.data[typeOfData])
                     }
@@ -33,7 +33,50 @@ io.on('connection', function (socket) {
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        currencyConvert: (parameters) => {
+            var from = parameters['unit-currency']['currency']
+            var to = parameters['currency-name']
+            var amount = parameters['unit-currency']['amount'] || 1
+            if (from && to && amount) {
+                var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
+                axios.get(url).then((res) => {
+                    var html = res.data
+                    const $ = cheerio.load(html)
+                    const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
+                    socket.emit('bot reply', value.eq(1).text() + ' ' + to)
+                }).catch((e) => {
+                    socket.emit('bot reply', 'Can not do this operation')
+                })
+            } else {
+                socket.emit('bot reply', 'Can not do this operation')
+            }
+
+        },
+        globalStats: (parameters) => {
+            var type = parameters['global-stats-types']
+            if (type == 'covid19') {
+                axios.get(`https://www.worldometers.info/coronavirus/`).then((res) => {
+                    var html = res.data
+                    const $ = cheerio.load(html)
+                    const value = $('.maincounter-number')
+                    socket.emit('bot reply', `${value.eq(0).text()} total cases, ${value.eq(1).text()} deaths, ${value.eq(2).text()} recovered`)
+                }).catch((e) => {
+                    socket.emit('bot reply', 'Can not do this operation')
+                })
+            } else if (type == 'worldPopulation') {
+                console.log('a')
+                axios.get(`https://www.worldometers.info/world-population/`).then((res) => {
+                    var html = res.data
+                    const $ = cheerio.load(html)
+                    const value = $('[rel="current_population"]')
+                    socket.emit('bot reply', value.text())
+                }).catch((e) => {
+                    socket.emit('bot reply', 'Can not do this operation')
+                })
+            }
         }
+
     }
     socket.on('chat message', (text) => {
 
