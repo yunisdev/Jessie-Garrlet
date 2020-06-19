@@ -72,7 +72,7 @@ if (SpeechRecognition) {
         var utterThis = new SpeechSynthesisUtterance(text);
         synth.speak(utterThis)
         utterThis.addEventListener('start', () => {
-            
+            recognition.stop()
         })
         utterThis.addEventListener('end', () => {
             recognition.start()
