@@ -45,6 +45,9 @@ nav a {
   width: 100% !important;
   text-align: left;
 }
+.chat div{
+  max-width: 50%;
+}
 .chat-you div {
   float: right !important;
   background-color: #7e407b;

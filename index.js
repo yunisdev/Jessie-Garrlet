@@ -82,6 +82,45 @@ io.on('connection', function (socket) {
                     socket.emit('bot reply', 'Can not do this operation')
                 })
             }
+        },
+        questionQuery: ({ parameters }) => {
+            if (parameters['question-prefix'] == 'infoQuery') {
+                axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
+                    .then((res) => {
+                        var data = res.data.query.search[0]
+                        socket.emit('bot reply multi', [`
+                            <div style="width:100%;max-width:100%;">
+                                <h4 style="display:block;font-weight:bold">${data.title}</h4>
+                                <p>${data.snippet}...<a target="_blank" href="https://en.wikipedia.org/wiki/${data.title.split(' ').join('_')}">read more</a></p>
+                            </div>
+                        `, 'I have found something like this.'])
+                    })
+                    .catch((err) => {
+
+                    })
+            } else if (parameters['question-prefix'] == 'searchQuery') {
+
+            } else if (parameters['question-prefix'] == 'whereQuery') {
+
+            }
+        },
+        youAreWrong: ({ }) => {
+            socket.emit('bot reply multi', [
+                `I will be happy if you help me to be better. For this you can open issue by <a href="https://github.com/YunisDEV/JessieAI/issues">clicking here</a>`,
+                `I will be happy if you help me to be better. For this you can open issue by clicking here`
+            ])
+        },
+        sleepTactics: ({ }) => {
+            socket.emit('bot reply multi', [
+                `You can check <a target="_blank" href="https://www.healthline.com/nutrition/ways-to-fall-asleep">'20 Simple Tips That Help You Fall Asleep Quickly'</a> article`,
+                `You can check '20 Simple Tips That Help You Fall Asleep Quickly' article`
+            ])
+        },
+        relaxTactics: ({ }) => {
+            socket.emit('bot reply multi', [
+                `You can check <a target="_blank" href="https://www.healthline.com/health/stress/how-to-relax">'How to Relax: Tips for Chilling Out'</a> article`,
+                `You can check 'How to Relax: Tips for Chilling Out' article`
+            ])
         }
 
     }

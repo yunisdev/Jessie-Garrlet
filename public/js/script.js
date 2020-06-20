@@ -59,7 +59,7 @@ if (SpeechRecognition) {
         chat('you', messageInput.value)
         messageInput.value = ''
         // if (!button.classList.contains('start')) {
-            recognition.stop()
+        recognition.stop()
         // }
     })
     document.addEventListener('keydown', (e) => {
@@ -70,6 +70,19 @@ if (SpeechRecognition) {
     socket.on('bot reply', (text) => {
         chat('jessie', text)
         var utterThis = new SpeechSynthesisUtterance(text);
+        synth.cancel()
+        synth.speak(utterThis)
+        utterThis.addEventListener('start', () => {
+            recognition.stop()
+        })
+        utterThis.addEventListener('end', () => {
+            recognition.start()
+        })
+    })
+    socket.on('bot reply multi', (arr) => {
+        chat('jessie', arr[0])
+        var utterThis = new SpeechSynthesisUtterance(arr[1]);
+        synth.cancel()
         synth.speak(utterThis)
         utterThis.addEventListener('start', () => {
             recognition.stop()
