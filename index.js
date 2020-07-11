@@ -84,7 +84,7 @@ io.on('connection', function (socket) {
                     socket.emit('bot reply', 'Can not do this operation')
                 })
             }
-        }, 
+        },
         searchQuery: ({ parameters }) => {
             axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
                 .then((res) => {
@@ -118,11 +118,17 @@ io.on('connection', function (socket) {
                 `You can check 'How to Relax: Tips for Chilling Out' article`
             ])
         },
-
-
+        repeatText: ({ parameters }) => {
+            socket.emit('bot reply', parameters.textForRepeat)
+        },
+        clearScreen: () => {
+            socket.emit('bot do', 'clearScreen')
+        },
+        changeTheme: () => {
+            socket.emit('bot do','changeTheme')
+        }
     }
     socket.on('chat message', (text) => {
-
         let apiaiReq = apiai.textRequest(text, {
             sessionId: Math.random() * 10000
         })

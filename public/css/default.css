@@ -11,6 +11,9 @@ nav {
   width: 100%;
   background-color: white !important;
 }
+.navbar-brand{
+  color:#50234e!important;
+}
 nav a {
   color: black !important;
 }
@@ -45,7 +48,7 @@ nav a {
   width: 100% !important;
   text-align: left;
 }
-.chat div{
+.chat div {
   max-width: 50%;
 }
 .chat-you div {
@@ -79,8 +82,8 @@ nav a {
   overflow-y: auto;
   height: 90%;
 }
-.message-form *{
-  outline: none!important;
+.message-form * {
+  outline: none !important;
 }
 .message-form {
   width: 100%;
@@ -102,7 +105,7 @@ nav a {
   float: right;
   padding: 10px;
   font-size: 18px;
-  width:50px;
+  width: 50px;
   background-color: white;
   color: #7e407b;
   border-style: solid;
@@ -110,9 +113,9 @@ nav a {
   border-radius: 50%;
   transition: 0.3s all ease-out;
 }
-.message-form button:hover { 
+.message-form button:hover {
   background-color: #7e407b;
-  color:white
+  color: white;
 }
 .message-form input:focus {
   border-color: #7e407b;

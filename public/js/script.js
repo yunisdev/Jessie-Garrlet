@@ -22,7 +22,6 @@ function chat(side, text) {
 
     messages.scrollTop = messages.scrollHeight;
 }
-
 if (SpeechRecognition) {
     button.hidden = false
 
@@ -90,6 +89,9 @@ if (SpeechRecognition) {
         utterThis.addEventListener('end', () => {
             recognition.start()
         })
+    })
+    socket.on('bot do', (func) => {
+        funcObj[func]()
     })
 } else {
     button.hidden = true
