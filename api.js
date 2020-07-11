@@ -142,7 +142,6 @@ router.post('/api/req', (req, Res) => {
                 Res.send({ type: 'bot do', result: 'changeTheme' })
             }
         }
-        console.log(req.body)
         var { text } = req.body
         let apiaiReq = apiai.textRequest(text, {
             sessionId: Math.random() * 10000
