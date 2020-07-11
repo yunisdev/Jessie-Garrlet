@@ -125,25 +125,33 @@ io.on('connection', function (socket) {
             socket.emit('bot do', 'clearScreen')
         },
         changeTheme: () => {
-            socket.emit('bot do','changeTheme')
+            socket.emit('bot do', 'changeTheme')
         }
     }
     socket.on('chat message', (text) => {
-        let apiaiReq = apiai.textRequest(text, {
-            sessionId: Math.random() * 10000
+        console.log(text)
+        axios.post('/api/req',{
+            text
+        }).then((res) => {
+            console.log(res)
+        }).catch((e) => {
+            console.log(e.message)
         })
-        apiaiReq.on('response', (response) => {
-            var aiText = response.result.fulfillment.speech
-            if (dataResolver[aiText]) {
-                dataResolver[aiText](response.result)
-            } else {
-                socket.emit('bot reply', aiText)
-            }
-        })
-        apiaiReq.on('error', (error) => {
-            console.log(error)
-        })
-        apiaiReq.end()
+        // let apiaiReq = apiai.textRequest(text, {
+        //     sessionId: Math.random() * 10000
+        // })
+        // apiaiReq.on('response', (response) => {
+        //     var aiText = response.result.fulfillment.speech
+        //     if (dataResolver[aiText]) {
+        //         dataResolver[aiText](response.result)
+        //     } else {
+        //         socket.emit('bot reply', aiText)
+        //     }
+        // })
+        // apiaiReq.on('error', (error) => {
+        //     console.log(error)
+        // })
+        // apiaiReq.end()
 
     })
 })
