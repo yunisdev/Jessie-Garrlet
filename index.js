@@ -8,8 +8,10 @@ const server = http.createServer(app)
 const io = socketio(server)
 const axios = require('axios')
 const cheerio = require('cheerio')
+const apiRouter = require('./api')
 app.use(express.static(__dirname + '/views'))
 app.use(express.static(__dirname + '/public'))
+app.use(apiRouter)
 app.get('/', (req, res) => {
     res.sendFile('index.html')
 })
@@ -82,27 +84,21 @@ io.on('connection', function (socket) {
                     socket.emit('bot reply', 'Can not do this operation')
                 })
             }
-        },
-        questionQuery: ({ parameters }) => {
-            if (parameters['question-prefix'] == 'infoQuery') {
-                axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
-                    .then((res) => {
-                        var data = res.data.query.search[0]
-                        socket.emit('bot reply multi', [`
-                            <div style="width:100%;max-width:100%;">
-                                <h4 style="display:block;font-weight:bold">${data.title}</h4>
-                                <p>${data.snippet}...<a target="_blank" href="https://en.wikipedia.org/wiki/${data.title.split(' ').join('_')}">read more</a></p>
-                            </div>
-                        `, 'I have found something like this.'])
-                    })
-                    .catch((err) => {
+        }, 
+        searchQuery: ({ parameters }) => {
+            axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
+                .then((res) => {
+                    var data = res.data.query.search[0]
+                    socket.emit('bot reply multi', [`
+                        <div style="width:100%;max-width:100%;">
+                            <h4 style="display:block;font-weight:bold">${data.title}</h4>
+                            <p>${data.snippet}...<a target="_blank" href="https://en.wikipedia.org/wiki/${data.title.split(' ').join('_')}">read more</a></p>
+                        </div>
+                    `, 'I have found something like this.'])
+                })
+                .catch((err) => {
 
-                    })
-            } else if (parameters['question-prefix'] == 'searchQuery') {
-
-            } else if (parameters['question-prefix'] == 'whereQuery') {
-
-            }
+                })
         },
         youAreWrong: ({ }) => {
             socket.emit('bot reply multi', [
@@ -121,7 +117,8 @@ io.on('connection', function (socket) {
                 `You can check <a target="_blank" href="https://www.healthline.com/health/stress/how-to-relax">'How to Relax: Tips for Chilling Out'</a> article`,
                 `You can check 'How to Relax: Tips for Chilling Out' article`
             ])
-        }
+        },
+
 
     }
     socket.on('chat message', (text) => {
@@ -144,6 +141,8 @@ io.on('connection', function (socket) {
 
     })
 })
+
+
 
 server.listen(process.env.PORT, () => {
     console.log('Server running')
