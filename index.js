@@ -16,18 +16,17 @@ app.get('/', (req, res) => {
     res.sendFile('index.html')
 })
 
-io.on('connection', function (socket) {
-    socket.on('chat message', (text) => {
-        console.log(text)
-        axios.post('https://jessie-ai.herokuapp.com/api/req',{
-            text
-        }).then(({data}) => {
-            socket.emit(data.type,data.result)
-        }).catch((e) => {
-            console.log(e.message)
-        })
-    })
-})
+// io.on('connection', function (socket) {
+//     socket.on('chat message', (text) => {
+//         axios.post('https://jessie-ai.herokuapp.com/api/req',{
+//             text
+//         }).then(({data}) => {
+//             socket.emit(data.type,data.result)
+//         }).catch((e) => {
+//             console.log(e.message)
+//         })
+//     })
+// })
 
 
 
