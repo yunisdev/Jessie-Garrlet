@@ -32,6 +32,9 @@ router.post('/api/webhook', (req, res) => {
                 }
                 var to = parameters['currency-name']
                 var amount = parameters['unit-currency']['amount']
+                console.log({
+                    from,to,amount
+                })
                 if (from && to && amount) {
                     var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
                     axios.get(url).then((res) => {
