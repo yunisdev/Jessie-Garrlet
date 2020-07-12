@@ -17,10 +17,21 @@ router.get('/api', (req, res) => {
 
 
 router.post('/api/webhook', (req, res) => {
-    try{
+    try {
         console.log('hello')
         console.log(req.body)
-    }catch(e){
+        res.send({
+            "fulfillmentMessages": [
+                {
+                    "text": {
+                        "text": [
+                            "Hello"
+                        ]
+                    }
+                }
+            ]
+        })
+    } catch (e) {
         console.log(e.message)
     }
 })
