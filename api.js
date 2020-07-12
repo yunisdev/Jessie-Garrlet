@@ -15,8 +15,6 @@ router.get('/api', (req, res) => {
     })
 })
 
-
-
 router.post('/api/webhook', (req, Res) => {
     try {
         const functionList = {
@@ -81,7 +79,46 @@ router.post('/api/webhook', (req, Res) => {
                         ]
                     })
                 }
-            }
+            },
+
+            countryInfo: ({ parameters }) => {
+                axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
+                    .then(response => {
+                        var typeOfData = parameters['country-info-type']
+                        if (typeOfData == 'currencies' || typeOfData == 'languages') {
+                            var dataForReturn = []
+                            response.data[typeOfData].forEach(i => {
+                                dataForReturn.push(i.name)
+                            })
+                            Res.send({
+                                "fulfillmentMessages": [
+                                    {
+                                        "text": {
+                                            "text": [
+                                                dataForReturn.join(',')
+                                            ]
+                                        }
+                                    }
+                                ]
+                            })
+                        } else {
+                            Res.send({
+                                "fulfillmentMessages": [
+                                    {
+                                        "text": {
+                                            "text": [
+                                                response.data[typeOfData]
+                                            ]
+                                        }
+                                    }
+                                ]
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
         }
         console.log('hello')
         var key = req.body.queryResult.fulfillmentText
@@ -126,52 +163,53 @@ router.post('/api/webhook', (req, Res) => {
 router.post('/api/req', (req, Res) => {
     try {
         const dataResolver = {
-            countryInfo: ({ parameters }) => {
-                axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
-                    .then(response => {
-                        var typeOfData = parameters['country-info-type']
-                        if (typeOfData == 'currencies' || typeOfData == 'languages') {
-                            var dataForReturn = []
-                            response.data[typeOfData].forEach(i => {
-                                dataForReturn.push(i.name)
-                            })
-                            Res.send({ type: 'bot reply', result: dataForReturn })
-                        } else {
-                            Res.send({ type: 'bot reply', result: response.data[typeOfData] })
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-            currencyConvert: ({ parameters, resolvedQuery }) => {
-                var from = parameters['unit-currency']['currency']
-                if (from == 'XBT') {
-                    from = 'BTC'
-                }
-                var q = resolvedQuery.toLowerCase()
-                if ((q.includes('try') || q.includes('turkish lira')) && !from) {
-                    from = 'try'
-                }
-                var to = parameters['currency-name']
-                var amount = parameters['unit-currency']['amount']
-                if (from && to && amount) {
-                    var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
-                    axios.get(url).then((res) => {
-                        var html = res.data
-                        const $ = cheerio.load(html)
-                        const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
-                        Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
-                    }).catch((e) => {
-                        console.log('b')
-                        Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-                    })
-                } else {
-                    console.log('a')
-                    Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-                }
+            // countryInfo: ({ parameters }) => {
+            //     axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
+            //         .then(response => {
+            //             var typeOfData = parameters['country-info-type']
+            //             if (typeOfData == 'currencies' || typeOfData == 'languages') {
+            //                 var dataForReturn = []
+            //                 response.data[typeOfData].forEach(i => {
+            //                     dataForReturn.push(i.name)
+            //                 })
+            //                 Res.send({ type: 'bot reply', result: dataForReturn })
+            //             } else {
+            //                 Res.send({ type: 'bot reply', result: response.data[typeOfData] })
+            //             }
+            //         })
+            //         .catch(error => {
+            //             console.log(error);
+            //         });
+            // },
 
-            },
+            // currencyConvert: ({ parameters, resolvedQuery }) => {
+            //     var from = parameters['unit-currency']['currency']
+            //     if (from == 'XBT') {
+            //         from = 'BTC'
+            //     }
+            //     var q = resolvedQuery.toLowerCase()
+            //     if ((q.includes('try') || q.includes('turkish lira')) && !from) {
+            //         from = 'try'
+            //     }
+            //     var to = parameters['currency-name']
+            //     var amount = parameters['unit-currency']['amount']
+            //     if (from && to && amount) {
+            //         var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
+            //         axios.get(url).then((res) => {
+            //             var html = res.data
+            //             const $ = cheerio.load(html)
+            //             const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
+            //             Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
+            //         }).catch((e) => {
+            //             console.log('b')
+            //             Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+            //         })
+            //     } else {
+            //         console.log('a')
+            //         Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+            //     }
+
+            // },
             globalStats: ({ parameters }) => {
                 var type = parameters['global-stats-types']
                 if (type == 'covid19') {
@@ -194,6 +232,7 @@ router.post('/api/req', (req, Res) => {
                     })
                 }
             },
+
             searchQuery: ({ parameters }) => {
                 axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
                     .then((res) => {
@@ -238,9 +277,6 @@ router.post('/api/req', (req, Res) => {
                         `You can check 'How to Relax: Tips for Chilling Out' article`
                     ]
                 })
-            },
-            repeatText: ({ parameters }) => {
-                Res.send({ type: 'bot reply', result: parameters.textForRepeat })
             },
             clearScreen: () => {
                 Res.send({ type: 'bot do', result: 'clearScreen' })
