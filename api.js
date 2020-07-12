@@ -353,7 +353,7 @@ router.post('/api/req', (req, Res) => {
             sessionId: Math.random() * 10000
         })
         apiaiReq.on('response', (response) => {
-            var aiText = response.result.fulfillment.messages[response.result.fulfillment.messages.length-1].speech
+            var aiText = response.result.fulfillment.messages[response.result.fulfillment.messages.length-1].speech || response.result.fulfillment.speech
             if (dataResolver[aiText]) {
                 dataResolver[aiText](response.result)
             } else {
