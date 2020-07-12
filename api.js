@@ -15,17 +15,66 @@ router.get('/api', (req, res) => {
     })
 })
 
+const functions = {
+    currencyConvert({ parameters, resolvedQuery }) {
+        var from = parameters['unit-currency']['currency']
+        if (from == 'XBT') {
+            from = 'BTC'
+        }
+        var q = resolvedQuery.toLowerCase()
+        if ((q.includes('try') || q.includes('turkish lira')) && !from) {
+            from = 'try'
+        }
+        var to = parameters['currency-name']
+        var amount = parameters['unit-currency']['amount']
+        if (from && to && amount) {
+            var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
+            axios.get(url).then((res) => {
+                var html = res.data
+                const $ = cheerio.load(html)
+                const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
+                Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
+            }).catch((e) => {
+                console.log('b')
+                Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+            })
+        } else {
+            console.log('a')
+            Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+        }
+
+    }
+}
 
 router.post('/api/webhook', (req, res) => {
     try {
         console.log('hello')
         console.log(req.body)
+        //Example req body
+        // const a = {
+        //     responseId: 'ed9765c6-fcf5-4c01-9b24-da1308c4a1c0-425db6e2',
+        //     queryResult: {
+        //         queryText: 'i am tired',
+        //         action: 'smalltalk.user.tired',
+        //         parameters: {},
+        //         allRequiredParamsPresent: true,
+        //         fulfillmentText: 'relaxTactics',
+        //         fulfillmentMessages: [[Object]],
+        //         outputContexts: [[Object]],
+        //         intent: {},
+        //         intentDetectionConfidence: 1,
+        //         languageCode: 'en'
+        //     },
+        //     originalDetectIntentRequest: { payload: {} },
+        //     session: 'projects/jack-tqnglp/agent/sessions/c70f58d2-a00f-408f-b116-72be9392c2e8:b029d0ad-c7e2-02f1-4f3d-807fefbb2eff'
+        // }
+
         res.send({
             "fulfillmentMessages": [
                 {
                     "text": {
                         "text": [
-                            "Hello"
+                            req.body.queryResult.fulfillmentText
                         ]
                     }
                 }
