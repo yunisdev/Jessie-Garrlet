@@ -200,24 +200,6 @@ router.post('/api/webhook', (req, Res) => {
                 ]
             })
         }
-        //Example req body
-        // const a = {
-        //     responseId: 'ed9765c6-fcf5-4c01-9b24-da1308c4a1c0-425db6e2',
-        //     queryResult: {
-        //         queryText: 'i am tired',
-        //         action: 'smalltalk.user.tired',
-        //         parameters: {},
-        //         allRequiredParamsPresent: true,
-        //         fulfillmentText: 'relaxTactics',
-        //         fulfillmentMessages: [[Object]],
-        //         outputContexts: [[Object]],
-        //         intent: {},
-        //         intentDetectionConfidence: 1,
-        //         languageCode: 'en'
-        //     },
-        //     originalDetectIntentRequest: { payload: {} },
-        //     session: 'projects/jack-tqnglp/agent/sessions/c70f58d2-a00f-408f-b116-72be9392c2e8:b029d0ad-c7e2-02f1-4f3d-807fefbb2eff'
-        // }
     } catch (e) {
         console.log(e.message)
     }
@@ -226,76 +208,6 @@ router.post('/api/webhook', (req, Res) => {
 router.post('/api/req', (req, Res) => {
     try {
         const dataResolver = {
-            // countryInfo: ({ parameters }) => {
-            //     axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
-            //         .then(response => {
-            //             var typeOfData = parameters['country-info-type']
-            //             if (typeOfData == 'currencies' || typeOfData == 'languages') {
-            //                 var dataForReturn = []
-            //                 response.data[typeOfData].forEach(i => {
-            //                     dataForReturn.push(i.name)
-            //                 })
-            //                 Res.send({ type: 'bot reply', result: dataForReturn })
-            //             } else {
-            //                 Res.send({ type: 'bot reply', result: response.data[typeOfData] })
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-            //         });
-            // },
-
-            // currencyConvert: ({ parameters, resolvedQuery }) => {
-            //     var from = parameters['unit-currency']['currency']
-            //     if (from == 'XBT') {
-            //         from = 'BTC'
-            //     }
-            //     var q = resolvedQuery.toLowerCase()
-            //     if ((q.includes('try') || q.includes('turkish lira')) && !from) {
-            //         from = 'try'
-            //     }
-            //     var to = parameters['currency-name']
-            //     var amount = parameters['unit-currency']['amount']
-            //     if (from && to && amount) {
-            //         var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
-            //         axios.get(url).then((res) => {
-            //             var html = res.data
-            //             const $ = cheerio.load(html)
-            //             const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
-            //             Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
-            //         }).catch((e) => {
-            //             console.log('b')
-            //             Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //         })
-            //     } else {
-            //         console.log('a')
-            //         Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //     }
-
-            // },
-            // globalStats: ({ parameters }) => {
-            //     var type = parameters['global-stats-types']
-            //     if (type == 'covid19') {
-            //         axios.get(`https://www.worldometers.info/coronavirus/`).then((res) => {
-            //             var html = res.data
-            //             const $ = cheerio.load(html)
-            //             const value = $('.maincounter-number')
-            //             Res.send({ type: 'bot reply', result: `${value.eq(0).text()} total cases, ${value.eq(1).text()} deaths, ${value.eq(2).text()} recovered` })
-            //         }).catch((e) => {
-            //             Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //         })
-            //     } else if (type == 'worldPopulation') {
-            //         axios.get(`https://www.worldometers.info/world-population/`).then((res) => {
-            //             var html = res.data
-            //             const $ = cheerio.load(html)
-            //             const value = $('[rel="current_population"]')
-            //             Res.send({ type: 'bot reply', result: value.text() })
-            //         }).catch((e) => {
-            //             Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //         })
-            //     }
-            // },
-
             searchQuery: ({ parameters }) => {
                 axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
                     .then((res) => {
