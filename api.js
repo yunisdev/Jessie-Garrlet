@@ -16,6 +16,14 @@ router.get('/api', (req, res) => {
 })
 
 
+router.post('/api/webhook', (req, res) => {
+    try{
+        console.log('hello')
+        console.log(req.body)
+    }catch(e){
+        console.log(e.message)
+    }
+})
 
 router.post('/api/req', (req, Res) => {
     try {
@@ -40,15 +48,15 @@ router.post('/api/req', (req, Res) => {
             },
             currencyConvert: ({ parameters, resolvedQuery }) => {
                 var from = parameters['unit-currency']['currency']
+                if (from == 'XBT') {
+                    from = 'BTC'
+                }
                 var q = resolvedQuery.toLowerCase()
                 if ((q.includes('try') || q.includes('turkish lira')) && !from) {
                     from = 'try'
                 }
-                console.log(from)
                 var to = parameters['currency-name']
-                console.log(to)
                 var amount = parameters['unit-currency']['amount']
-                console.log(amount)
                 if (from && to && amount) {
                     var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
                     axios.get(url).then((res) => {
@@ -57,9 +65,11 @@ router.post('/api/req', (req, Res) => {
                         const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
                         Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
                     }).catch((e) => {
+                        console.log('b')
                         Res.send({ type: 'bot reply', result: 'Can not do this operation' })
                     })
                 } else {
+                    console.log('a')
                     Res.send({ type: 'bot reply', result: 'Can not do this operation' })
                 }
 
@@ -90,7 +100,6 @@ router.post('/api/req', (req, Res) => {
                 axios.get('https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + parameters['query'])
                     .then((res) => {
                         var data = res.data.query.search[0]
-                        console.log('Hello')
                         Res.send({
                             type: 'bot reply multi',
                             result: [`
@@ -163,7 +172,5 @@ router.post('/api/req', (req, Res) => {
     }
 
 })
-router.get('/hello', (req, res) => {
-    res.send('Hello')
-})
+
 module.exports = router
