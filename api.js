@@ -17,7 +17,7 @@ router.get('/api', (req, res) => {
 
 
 
-router.post('/api/webhook', (req, res) => {
+router.post('/api/webhook', (req, Res) => {
     try {
         const functionList = {
             currencyConvert({ parameters, queryText }) {
@@ -41,7 +41,7 @@ router.post('/api/webhook', (req, res) => {
                         var html = res.data
                         const $ = cheerio.load(html)
                         const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
-                        res.send({
+                        Res.send({
                             "fulfillmentMessages": [
                                 {
                                     "text": {
@@ -53,7 +53,7 @@ router.post('/api/webhook', (req, res) => {
                             ]
                         })
                     }).catch((e) => {
-                        res.send({
+                        Res.send({
                             "fulfillmentMessages": [
                                 {
                                     "text": {
@@ -66,7 +66,7 @@ router.post('/api/webhook', (req, res) => {
                         })
                     })
                 } else {
-                    res.send({
+                    Res.send({
                         "fulfillmentMessages": [
                             {
                                 "text": {
@@ -85,7 +85,7 @@ router.post('/api/webhook', (req, res) => {
         if (functionList[key]) {
             functionList[key](req.body.queryResult)
         } else {
-            res.send({
+            Res.send({
                 "fulfillmentMessages": [
                     {
                         "text": {
