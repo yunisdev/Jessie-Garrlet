@@ -31,6 +31,9 @@ router.post('/api/webhook', (req, Res) => {
                     from = 'try'
                 }
                 var to = parameters['currency-name']
+                if(to == 'XBT'){
+                    to = 'BTC'
+                }
                 var amount = parameters['unit-currency']['amount']
                 console.log({
                     from,to,amount
