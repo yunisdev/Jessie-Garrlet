@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "env-cmd -f ./env/data.env nodemon index.js -e js,html,css,json"
+    "dev": "env-cmd -f ./env/data.env nodemon index.js -e js,html,css,json",
+    "quick-push":"git add .;git commit -m \"api\";git push -u heroku master"
   },
   "author": "YunisDEV",
   "license": "ISC",
