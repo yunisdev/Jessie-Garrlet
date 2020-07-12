@@ -29,12 +29,12 @@ router.post('/api/webhook', (req, Res) => {
                     from = 'try'
                 }
                 var to = parameters['currency-name']
-                if(to == 'XBT'){
+                if (to == 'XBT') {
                     to = 'BTC'
                 }
                 var amount = parameters['unit-currency']['amount']
                 console.log({
-                    from,to,amount
+                    from, to, amount
                 })
                 if (from && to && amount) {
                     var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
@@ -107,7 +107,7 @@ router.post('/api/webhook', (req, Res) => {
                                     {
                                         "text": {
                                             "text": [
-                                                response.data[typeOfData]
+                                                response.data[typeOfData] || 'I don\'t know.'
                                             ]
                                         }
                                     }
@@ -163,53 +163,53 @@ router.post('/api/webhook', (req, Res) => {
 router.post('/api/req', (req, Res) => {
     try {
         const dataResolver = {
-            // countryInfo: ({ parameters }) => {
-            //     axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
-            //         .then(response => {
-            //             var typeOfData = parameters['country-info-type']
-            //             if (typeOfData == 'currencies' || typeOfData == 'languages') {
-            //                 var dataForReturn = []
-            //                 response.data[typeOfData].forEach(i => {
-            //                     dataForReturn.push(i.name)
-            //                 })
-            //                 Res.send({ type: 'bot reply', result: dataForReturn })
-            //             } else {
-            //                 Res.send({ type: 'bot reply', result: response.data[typeOfData] })
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-            //         });
-            // },
+            countryInfo: ({ parameters }) => {
+                axios.get(`https://restcountries.eu/rest/v2/alpha/${parameters['geo-country-code'][parameters['geo-country-code'].length - 1]['alpha-3'].toLowerCase()}`)
+                    .then(response => {
+                        var typeOfData = parameters['country-info-type']
+                        if (typeOfData == 'currencies' || typeOfData == 'languages') {
+                            var dataForReturn = []
+                            response.data[typeOfData].forEach(i => {
+                                dataForReturn.push(i.name)
+                            })
+                            Res.send({ type: 'bot reply', result: dataForReturn })
+                        } else {
+                            Res.send({ type: 'bot reply', result: response.data[typeOfData] })
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
 
-            // currencyConvert: ({ parameters, resolvedQuery }) => {
-            //     var from = parameters['unit-currency']['currency']
-            //     if (from == 'XBT') {
-            //         from = 'BTC'
-            //     }
-            //     var q = resolvedQuery.toLowerCase()
-            //     if ((q.includes('try') || q.includes('turkish lira')) && !from) {
-            //         from = 'try'
-            //     }
-            //     var to = parameters['currency-name']
-            //     var amount = parameters['unit-currency']['amount']
-            //     if (from && to && amount) {
-            //         var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
-            //         axios.get(url).then((res) => {
-            //             var html = res.data
-            //             const $ = cheerio.load(html)
-            //             const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
-            //             Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
-            //         }).catch((e) => {
-            //             console.log('b')
-            //             Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //         })
-            //     } else {
-            //         console.log('a')
-            //         Res.send({ type: 'bot reply', result: 'Can not do this operation' })
-            //     }
+            currencyConvert: ({ parameters, resolvedQuery }) => {
+                var from = parameters['unit-currency']['currency']
+                if (from == 'XBT') {
+                    from = 'BTC'
+                }
+                var q = resolvedQuery.toLowerCase()
+                if ((q.includes('try') || q.includes('turkish lira')) && !from) {
+                    from = 'try'
+                }
+                var to = parameters['currency-name']
+                var amount = parameters['unit-currency']['amount']
+                if (from && to && amount) {
+                    var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
+                    axios.get(url).then((res) => {
+                        var html = res.data
+                        const $ = cheerio.load(html)
+                        const value = $('div.conversion-content div.blockquote-classic p span.pretty-sum')
+                        Res.send({ type: 'bot reply', result: value.eq(1).text() + ' ' + to })
+                    }).catch((e) => {
+                        console.log('b')
+                        Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+                    })
+                } else {
+                    console.log('a')
+                    Res.send({ type: 'bot reply', result: 'Can not do this operation' })
+                }
 
-            // },
+            },
             globalStats: ({ parameters }) => {
                 var type = parameters['global-stats-types']
                 if (type == 'covid19') {
