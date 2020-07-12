@@ -61,7 +61,7 @@ router.post('/api/webhook', (req, Res) => {
                                 {
                                     "text": {
                                         "text": [
-                                            e.message
+                                            "Can not do this operation"
                                         ]
                                     }
                                 }
