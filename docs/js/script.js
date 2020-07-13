@@ -85,8 +85,7 @@ if (SpeechRecognition) {
         fetch(apiURL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ text: result })
         }).then((res) => {
@@ -100,8 +99,7 @@ if (SpeechRecognition) {
         fetch(apiURL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ text: messageInput.value })
         }).then((res) => {

@@ -203,6 +203,7 @@ router.post('/api/webhook', (req, Res) => {
 })
 
 router.post('/api/req', (req, Res) => {
+    Res.setHeader('Access-Control-Allow-Origin','*')
     try {
         const dataResolver = {
             searchQuery: ({ parameters }) => {
