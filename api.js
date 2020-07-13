@@ -7,6 +7,10 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 
 router.get('/api', (req, res) => {
     res.status(200).json({
@@ -203,7 +207,6 @@ router.post('/api/webhook', (req, Res) => {
 })
 
 router.post('/api/req', (req, Res) => {
-    Res.setHeader('Access-Control-Allow-Origin','*')
     try {
         const dataResolver = {
             searchQuery: ({ parameters }) => {
@@ -263,7 +266,7 @@ router.post('/api/req', (req, Res) => {
             sessionId: Math.random() * 10000
         })
         apiaiReq.on('response', (response) => {
-            var aiText = response.result.fulfillment.messages[response.result.fulfillment.messages.length-1].speech || response.result.fulfillment.speech
+            var aiText = response.result.fulfillment.messages[response.result.fulfillment.messages.length - 1].speech || response.result.fulfillment.speech
             if (dataResolver[aiText]) {
                 dataResolver[aiText](response.result)
             } else {
