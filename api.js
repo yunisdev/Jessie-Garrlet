@@ -33,9 +33,6 @@ router.post('/api/webhook', (req, Res) => {
                     to = 'BTC'
                 }
                 var amount = parameters['unit-currency']['amount']
-                console.log({
-                    from, to, amount
-                })
                 if (from && to && amount) {
                     var url = `https://exchangerate.guru/${from.toLowerCase()}/${to.toLowerCase()}/${amount}/`
                     axios.get(url).then((res) => {
@@ -183,11 +180,9 @@ router.post('/api/webhook', (req, Res) => {
                 }
             },
         }
-        console.log('hello')
         var key = req.body.queryResult.fulfillmentText
-        console.log('\n\n'+key+'\n\n');console.log('\n\n'+req.body.queryResult+'\n\n')
+        console.log(JSON.stringify(req.body))
         if (functionList[key]) {
-            console.log('special command')
             functionList[key](req.body.queryResult)
         } else {
             Res.send({
