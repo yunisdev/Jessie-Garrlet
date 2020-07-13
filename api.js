@@ -185,8 +185,9 @@ router.post('/api/webhook', (req, Res) => {
         }
         console.log('hello')
         var key = req.body.queryResult.fulfillmentText
-        console.log(key)
+        console.log('\n\n'+key+'\n\n');console.log('\n\n'+req.body.queryResult+'\n\n')
         if (functionList[key]) {
+            console.log('special command')
             functionList[key](req.body.queryResult)
         } else {
             Res.send({
