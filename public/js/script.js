@@ -1,3 +1,4 @@
+var apiURL = '/api/req'
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 var synth = window.speechSynthesis;
 var button = document.querySelector('#talk')
@@ -81,7 +82,7 @@ if (SpeechRecognition) {
         var result = e.results[e.results.length - 1][0].transcript
         chat('you', result)
         recognition.stop()
-        fetch('/api/req', {
+        fetch(apiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,7 +96,7 @@ if (SpeechRecognition) {
     })
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-        fetch('/api/req', {
+        fetch(apiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

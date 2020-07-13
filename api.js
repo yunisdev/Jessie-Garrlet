@@ -185,6 +185,7 @@ router.post('/api/webhook', (req, Res) => {
         }
         console.log('hello')
         var key = req.body.queryResult.fulfillmentText
+        console.log(key)
         if (functionList[key]) {
             functionList[key](req.body.queryResult)
         } else {
