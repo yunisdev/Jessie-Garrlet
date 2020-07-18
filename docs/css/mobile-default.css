@@ -1,0 +1,123 @@
+body {
+  background-color: #7e407b;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23D18'/%3E%3Cstop offset='1' stop-color='%237e407b'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FA3' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FA3' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+nav {
+  width: 100%;
+  background-color: white !important;
+}
+.navbar-brand{
+  color:#50234e!important;
+}
+nav a {
+  color: black !important;
+}
+#talk {
+  border-radius: 10px;
+  width: 150px;
+  border: 2px solid #7e407b;
+  background-color: transparent;
+  color: #7e407b;
+  padding: 7px;
+  transition: all ease-out 0.3s;
+  vertical-align: middle;
+}
+#talk:hover {
+  color: white;
+  background-color: #7e407b;
+}
+.message-container {
+  width: 90%;
+  margin-left: 5%;
+  height: 80vh;
+  margin-top: 6vh;
+  position: fixed;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px #38183781;
+  display: block;
+}
+.chat {
+  float: left;
+  width: 100% !important;
+  text-align: left;
+}
+.chat div {
+  max-width: 50%;
+}
+.chat-you div {
+  float: right !important;
+  background-color: #7e407b;
+  border-radius: 50px 50px 0px 50px;
+  color: white;
+  padding: 10px 30px;
+}
+
+.chat-jessie div {
+  float: left !important;
+  background-color: rgb(199, 199, 199);
+  border-radius: 50px 50px 50px 0px;
+  color: black;
+  padding: 10px 30px;
+}
+.no-message::after {
+  content: "Please press start button above for start conversation";
+  font-size: 30px;
+  width: 100%;
+  color: rgba(128, 128, 128, 0.726);
+  height: 100%;
+  vertical-align: middle;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.message-body {
+  overflow-y: auto;
+  height: 90%;
+}
+.message-form * {
+  outline: none !important;
+}
+.message-form {
+  width: 100%;
+  float: left;
+  padding: 0 50px;
+  padding-top: 10px;
+  height: 10%;
+}
+.message-form input {
+  width: 90%;
+  float: left;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgb(179, 179, 179);
+  font-size: 18px;
+  transition: 0.3s all ease-out;
+}
+.message-form button {
+  float: right;
+  padding: 10px;
+  font-size: 18px;
+  width: 50px;
+  background-color: white;
+  color: #7e407b;
+  border-style: solid;
+  border-color: #7e407b;
+  border-radius: 50%;
+  transition: 0.3s all ease-out;
+}
+.message-form button:hover {
+  background-color: #7e407b;
+  color: white;
+}
+.message-form input:focus {
+  border-color: #7e407b;
+  box-shadow: 0px 0px 10px #7e407b;
+}
