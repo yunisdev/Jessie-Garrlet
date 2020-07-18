@@ -115,9 +115,9 @@ nav a {
   height: 7%;
 }
 .message-form input {
-  width: 80%;
+  width: 90%;
+  margin-left:5%;
   float: left;
-  height: 100%;
   padding: 20px;
   border-radius: 10px;
   border: 1px solid rgb(179, 179, 179);
@@ -126,18 +126,18 @@ nav a {
 }
 .message-form button {
   float: right;
-  padding:0;
-  font-size: 50px;
   background-color: white;
   color: #7e407b;
   border-style: solid;
   border-color: #7e407b;
   border-radius: 50%;
   transition: 0.3s all ease-out;
+  display :none;
 }
 .message-form button i{
+  font-size: 50px;
   margin:0;
-  padding:0;
+  padding:20px;
 }
 .message-form button:hover {
   background-color: #7e407b;
