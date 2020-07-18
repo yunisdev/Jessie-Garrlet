@@ -6,6 +6,15 @@ body {
 .desktop-talk {
   display: none !important;
 }
+
+.mobile-talk-class{
+  width: 100%;
+  float: left;
+  padding: 0 10px;
+  padding-top: 10px;
+  height: 23%;
+}
+
 nav {
   padding: 40px;
   width: 100%;
@@ -29,7 +38,10 @@ nav a {
 }
 #talk {
   border-radius: 10px;
-  width: 150px;
+  width: 80%;
+  margin-left:10%;
+  font-size:60px;
+  margin-top:20px;
   border: 2px solid #7e407b;
   background-color: transparent;
   color: #7e407b;
@@ -77,7 +89,7 @@ nav a {
   padding: 10px 30px;
 }
 .no-message::after {
-  content: "Please press microphone button for start conversation or type in text";
+  content: "Please press start button below for start conversation or type in text";
   font-size: 60px;
   width: 100%;
   color: rgba(128, 128, 128, 0.726);

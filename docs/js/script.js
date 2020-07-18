@@ -1,29 +1,9 @@
 var apiURL = 'https://jessie-ai.herokuapp.com/api/req'
-var Theme
-if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    var Theme = {
-        dark: './css/mobile-dark.css',
-        light: './css/mobile-default.css'
-    }
-    document.getElementById('theme-stylesheet').setAttribute('href',Theme.light)
-    document.querySelector('.mobile-talk').setAttribute('id','talk')
-    var formHTML = document.querySelector('.message-form')
-    var heightHTML = parseFloat(window.getComputedStyle(formHTML).height)-parseFloat(window.getComputedStyle(formHTML).padding)
-    // var paddingHTML = parseFloat(window.getComputedStyle(inputHTML).padding)
-    // console.log(heightHTML+paddingHTML*2)
-    console.log(heightHTML)
-    document.querySelector('button[type="submit"]').setAttribute('style',`height:${heightHTML}px;width:${heightHTML}px`)
-} else {
-    var Theme = {
-        dark: './css/dark.css',
-        light: './css/default.css'
-    }
-    document.querySelector('.desktop-talk').setAttribute('id','talk')
-}
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 var synth = window.speechSynthesis;
-var button = document.querySelector('#talk')
 var you = document.querySelector('#you')
+var button = document.querySelector('#talk')
 var jessie = document.querySelector('#jessie')
 var messages = document.querySelector('.message-body')
 var form = document.querySelector('form.message-form')

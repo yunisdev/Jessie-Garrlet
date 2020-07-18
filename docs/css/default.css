@@ -8,7 +8,7 @@ body {
   overflow: hidden;
 }
 
-.mobile-talk{
+.mobile-talk,.mobile-talk-class{
   display: none!important;
 }
 
@@ -17,8 +17,8 @@ nav {
   background-color: white !important;
 }
 .navbar-brand {
-  font-size: 30px;
-  letter-spacing: 5px;
+  font-size: 30px!important;
+  letter-spacing: 5px!important;
   color: #50234e !important;
 }
 nav a {
