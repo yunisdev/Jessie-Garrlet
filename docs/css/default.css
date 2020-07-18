@@ -7,15 +7,23 @@ body {
   padding: 0;
   overflow: hidden;
 }
+
+.mobile-talk{
+  display: none!important;
+}
+
 nav {
   width: 100%;
   background-color: white !important;
 }
-.navbar-brand{
-  color:#50234e!important;
+.navbar-brand {
+  font-size: 30px;
+  letter-spacing: 5px;
+  color: #50234e !important;
 }
 nav a {
   color: black !important;
+  text-decoration: none;
 }
 #talk {
   border-radius: 10px;

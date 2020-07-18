@@ -11,7 +11,9 @@ nav {
   width: 100%;
   background-color: #3a1c38 !important;
 }
-
+.mobile-talk{
+  display: none!important;
+}
 .navbar-brand{
     color:#ece0ec!important;
   }
